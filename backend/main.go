@@ -1,29 +1,27 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
-	"strings"
-
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/labstack/echo/v4"
 )
 
-func authMiddleware(jwtSecret string) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			authHeader := c.Request().Header.Get("Authorization")
-			tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+type Post struct {
+	ID int `json:"id"`
+	Title string `json:"title"`
+	Content string `json:"content"`
+}
 
-			token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-				return []byte(jwtSecret), nil
-			})
-
-			if err != nil || !token.Valid {
-				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Unauthorized"})
-			}
-
-			return next(c)
-		}
+func main(){
+	posts:= []Post{
+		{ID: 1, Title:"初めてのGo", Content:"Goのバックエンドです"},
+		{ID: 2, Title:"Next.js", Content:"apiでの連携です。"},
 	}
+
+	http.HandleFunc("/posts", func (w http.ResponseWriter, r *http.Request){
+		// CORSの設定
+		w.Header().Set("Access-Control-Allow-Origin","*")
+		w.Header().Set("Content-Type","application/json")
+		json.NewEncoder(w).Encode(posts)
+	})
+	http.ListenAndServe(":8080", nil)
 }
