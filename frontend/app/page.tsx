@@ -2,6 +2,7 @@ type Post = {
   id: number;
   title: string;
   content: string;
+  description: string;
 };
 
 export default async function Home() {
@@ -18,6 +19,7 @@ export default async function Home() {
           <article key={post.id} style={{ border: '1px solid #ccc', padding: '1rem' }}>
             <h2>{post.title}</h2>
             <p>{post.content}</p>
+            <p>{post.description}</p>
           </article>
         ))}
       </div>

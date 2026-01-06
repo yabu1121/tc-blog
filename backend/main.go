@@ -9,12 +9,13 @@ type Post struct {
 	ID int `json:"id"`
 	Title string `json:"title"`
 	Content string `json:"content"`
+	Description string `json:"description"`
 }
 
 func main(){
 	posts:= []Post{
-		{ID: 1, Title:"初めてのGo", Content:"Goのバックエンドです"},
-		{ID: 2, Title:"Next.js", Content:"apiでの連携です。"},
+		{ID: 1, Title:"初めてのGo", Content:"Goのバックエンドです", Description: "初めてGoのバックエンドでapiを作成しています"},
+		{ID: 2, Title:"Next.js", Content:"apiでの連携です。", Description: "Next.jsのバックエンドも作れるという特徴を腐らせています"},
 	}
 
 	http.HandleFunc("/posts", func (w http.ResponseWriter, r *http.Request){
